@@ -1,5 +1,9 @@
 pipeline {
- agent any
+  agent {
+    docker {
+      image 'composer:2'
+    }
+  }
   
  environment {
    CI_ENV = 'production'

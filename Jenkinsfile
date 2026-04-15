@@ -1,10 +1,6 @@
 pipeline {
-  agent {
-    docker {
-      image 'composer:2'
-    }
-  }
-  
+	agent any
+	
  environment {
    CI_ENV = 'production'
  }
@@ -16,6 +12,17 @@ pipeline {
     'https://github.com/abyanmusyaffa/CodeIgniter-CI.git'
      }
    }
+	  stage('Setup Environment') {
+      steps {
+        sh '''
+        apt-get update
+        apt-get install -y php-cli php-mbstring unzip curl git
+
+        curl -sS https://getcomposer.org/installer | php
+        mv composer.phar /usr/local/bin/composer
+        '''
+      }
+    }
    stage('Install Dependencies') {
      steps {
      sh 'composer install --no-dev --optimize-autoloader'
